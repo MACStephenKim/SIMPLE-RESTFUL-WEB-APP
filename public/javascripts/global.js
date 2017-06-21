@@ -5,7 +5,6 @@ $(document).ready(function(){
     $('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
     $('#btnAddUser').on('click', addUser);
     $('#userList table tbody').on('click', 'td a.linkdeleteuser', deleteUser);
-    $('#userList table tbody').on('click', 'td a.linkupdateuser', updateUser);
 });
 
 function populateTable(){
@@ -17,7 +16,6 @@ function populateTable(){
             tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.username + '">' + this.username + '</a></td>';
             tableContent += '<td>' + this.email + '</td>';
             tableContent += '<td><a href="#" class="linkdeleteuser" rel="' + this._id + '">delete</a></td>';
-            tableContent += '<td><a href="#" class="linkupdateuser" rel="' + this._id + '">update</a></td>';
             tableContent += '</tr>';
         });
         $('#userList table tbody').html(tableContent);
@@ -122,31 +120,3 @@ function deleteUser(event){
     }
 };
 
-function updateUser(event){
-    event.preventDefault();
-    var confirmation = confirm('Are you sure you want to update this user?');
-    if(confirmation ===true){
-        $.ajax({
-            type: 'PUT',
-            url: '/users/updateuser/' + $(this).attr('rel')
-        }).done(function( response ) {
-
-            // Check for a successful (blank) response
-            if (response.msg === '') {
-            }
-            else {
-                alert('Error: ' + response.msg);
-            }
-
-            // Update the table
-            populateTable();
-
-        });
-    }
-    else {
-
-        // If they said no to the confirm, do nothing
-        return false;
-
-    }
-};
